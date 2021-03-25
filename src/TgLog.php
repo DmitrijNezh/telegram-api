@@ -18,6 +18,15 @@ use unreal4u\TelegramAPI\Telegram\Types\File;
  */
 class TgLog
 {
+    private $apiHost = 'https://api.telegram.org';
+
+    public function setApiHost($host = 'https://api.telegram.org')
+    {
+        $this->apiHost = $host;
+    }
+    
+    // - - - - 
+    
     /**
      * @var RequestHandlerInterface
      */
@@ -70,7 +79,6 @@ class TgLog
 
         $this->requestHandler = $handler;
         $this->formConstructor = new PostOptionsConstructor();
-        $this->apiUrl = 'https://api.telegram.org/bot' . $this->botToken . '/';
     }
 
     /**
@@ -102,7 +110,7 @@ class TgLog
      */
     public function downloadFile(File $file): PromiseInterface
     {
-        $url = 'https://api.telegram.org/file/bot' . $this->botToken . '/' . $file->file_path;
+        $url = $this->apiHost . '/file/bot' . $this->botToken . '/' . $file->file_path;
         $this->logger->debug('About to perform request to begin downloading file');
 
         return $this->requestHandler->get($url)->then(
@@ -154,6 +162,6 @@ class TgLog
         $this->methodName = substr($completeClassName, strrpos($completeClassName, '\\') + 1);
         $this->logger->info('About to perform API request', ['method' => $this->methodName]);
 
-        return $this->apiUrl . $this->methodName;
+        return $this->apiHost . '/bot' . $this->botToken . '/' . $this->methodName;
     }
 }
