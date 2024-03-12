@@ -21,7 +21,7 @@ class SendStickerTest extends TestCase
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tgLog = new MockTgLog('TEST-TEST');
     }
@@ -29,7 +29,7 @@ class SendStickerTest extends TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->tgLog = null;
     }
@@ -59,8 +59,8 @@ class SendStickerTest extends TestCase
 
             $this->assertInstanceOf(Sticker::class, $result->sticker);
             $this->assertEquals($sendSticker->sticker, $result->sticker->file_id);
-            $this->assertInstanceOf(PhotoSize::class, $result->sticker->thumb);
-            $this->assertEquals(128, $result->sticker->thumb->height);
+            $this->assertInstanceOf(PhotoSize::class, $result->sticker->thumbnail);
+            $this->assertEquals(128, $result->sticker->thumbnail->height);
 
             $this->assertSame('{"key":"value"}', json_encode($result->sticker->unknown_field));
         });

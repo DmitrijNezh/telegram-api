@@ -110,10 +110,10 @@ class TgLog
      */
     public function downloadFile(File $file): PromiseInterface
     {
-        $url = $this->apiHost . '/file/bot' . $this->botToken . '/' . $file->file_path;
+        $fileUrl = $this->fileUrl($file);
         $this->logger->debug('About to perform request to begin downloading file');
 
-        return $this->requestHandler->get($url)->then(
+        return $this->requestHandler->get($fileUrl)->then(
             function (TelegramResponse $rawData) {
                 return new TelegramDocument($rawData);
             }
@@ -163,5 +163,16 @@ class TgLog
         $this->logger->info('About to perform API request', ['method' => $this->methodName]);
 
         return $this->apiHost . '/bot' . $this->botToken . '/' . $this->methodName;
+    }
+
+    /**
+     * Generate URL for file download using bot token
+     *
+     * @param File $file
+     * @return string
+     */
+    public function fileUrl(File $file): string
+    {
+        return $this->apiHost . '/file/bot' . $this->botToken . '/' . $file->file_path;
     }
 }

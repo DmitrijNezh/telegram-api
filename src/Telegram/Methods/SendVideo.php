@@ -57,6 +57,12 @@ class SendVideo extends TelegramMethods
      *
      * @var InputFile
      */
+    public $thumbnail;
+
+    /**
+     * @deprecated Use $thumbnail instead (Bot API 6.6, March 9, 2023 https://core.telegram.org/bots/api-changelog#march-9-2023)
+     * @var InputFile
+     */
     public $thumb;
 
     /**
@@ -91,6 +97,12 @@ class SendVideo extends TelegramMethods
      * @var int
      */
     public $reply_to_message_id = 0;
+
+    /**
+     * Optional. Pass True if the message should be sent even if the specified replied-to message is not found
+     * @var bool
+     */
+    public $allow_sending_without_reply = false;
 
     /**
      * Optional. Additional interface options. A JSON-serialized object for a custom reply keyboard, instructions to

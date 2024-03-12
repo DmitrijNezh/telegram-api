@@ -42,6 +42,22 @@ class SendAudio extends TelegramMethods
     public $audio = '';
 
     /**
+     * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported
+     * server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height
+     * should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused
+     * and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was
+     * uploaded using multipart/form-data under <file_attach_name>.
+     * @var string|InputFile
+     */
+    public $thumbnail;
+
+    /**
+     * @deprecated Use $thumbnail instead (Bot API 6.6, March 9, 2023 https://core.telegram.org/bots/api-changelog#march-9-2023)
+     * @var string|InputFile
+     */
+    public $thumb;
+
+    /**
      * Optional. Audio caption, 0-200 characters
      * @var string
      */
@@ -87,6 +103,12 @@ class SendAudio extends TelegramMethods
     public $reply_to_message_id = 0;
 
     /**
+     * Optional. Pass True if the message should be sent even if the specified replied-to message is not found
+     * @var bool
+     */
+    public $allow_sending_without_reply = false;
+
+    /**
      * Optional. Additional interface options. A JSON-serialized object for a custom reply keyboard, instructions to
      * hide keyboard or to force a reply from the user
      * @var KeyboardMethods
@@ -108,6 +130,10 @@ class SendAudio extends TelegramMethods
 
     public function getLocalFiles(): Generator
     {
-        yield 'audio' => $this->audio;
+        yield from [
+            'audio' => $this->audio,
+            'thumbnail' => $this->thumbnail,
+            'thumb' => $this->thumb,
+        ];
     }
 }

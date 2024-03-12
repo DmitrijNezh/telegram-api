@@ -15,8 +15,12 @@ use unreal4u\TelegramAPI\Abstracts\TelegramTypes;
  */
 class Sticker extends TelegramTypes
 {
+    public const TYPE_REGULAR = 'regular';
+    public const TYPE_MASK = 'mask';
+    public const TYPE_CUSTOM_EMOJI = 'custom_emoji';
+
     /**
-     * Unique identifier for this file
+     * Identifier for this file, which can be used to download or reuse the file
      * @var string
      */
     public $file_id = '';
@@ -28,6 +32,14 @@ class Sticker extends TelegramTypes
      * @var string
      */
     public $file_unique_id = '';
+
+    /**
+     * Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”. The type of the sticker is independent
+     * from its format, which is determined by the fields is_animated and is_video.
+     *
+     * @var string
+     */
+    public $type = '';
 
     /**
      * Photo width
@@ -50,7 +62,21 @@ class Sticker extends TelegramTypes
     public $is_animated = false;
 
     /**
+     * True, if the sticker is video sticker
+     * @see https://telegram.org/blog/video-stickers-better-reactions
+     *
+     * @var bool
+     */
+    public $is_video = false;
+
+    /**
      * Optional. Sticker thumbnail in .webp or .jpg format
+     * @var PhotoSize
+     */
+    public $thumbnail;
+
+    /**
+     * @deprecated Use $thumbnail instead (Bot API 6.6, March 9, 2023 https://core.telegram.org/bots/api-changelog#march-9-2023)
      * @var PhotoSize
      */
     public $thumb;
@@ -68,10 +94,29 @@ class Sticker extends TelegramTypes
     public $set_name = '';
 
     /**
+     * Optional. For premium regular stickers, premium animation for the sticker
+     * @var File
+     */
+    public $premium_animation = '';
+
+    /**
      * Optional. For mask stickers, the position where the mask should be placed
      * @var MaskPosition
      */
     public $mask_position;
+
+    /**
+     * Optional. For custom emoji stickers, unique identifier of the custom emoji
+     * @var string
+     */
+    public $custom_emoji_id = '';
+
+    /**
+     * Optional. True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium
+     * badge in emoji status, white color on chat photos, or another appropriate color in other places
+     * @var bool
+     */
+    public $needs_repainting = false;
 
     /**
      * Optional. File size
@@ -82,6 +127,7 @@ class Sticker extends TelegramTypes
     protected function mapSubObjects(string $key, array $data): TelegramTypes
     {
         switch ($key) {
+            case 'thumbnail':
             case 'thumb':
                 return new PhotoSize($data, $this->logger);
             case 'mask_position':
